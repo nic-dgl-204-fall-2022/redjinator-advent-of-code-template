@@ -24,9 +24,13 @@ Sample of the first 5 lines in `input.txt`
 * Repeat for remaining presents
 
 ## First solution
-To deal with the measurements I read the `input.txt` file using `val input = readInput("filename")` from `Utils.kt` and converting them from `String` to `Int`
+To deal with the measurements I read the `input.txt` file using `val input = readInput("filename")` from `Utils.kt` and use `.map{ } `to create them from `String` to `Int` as seen below 
+```
+val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
+```
 
-### part1
+### function _part1(input: List<String.>)_
+The _part1()_ function is the primary vehicle to carry out the required steps towards....................... I'm so tired I need to do this tomorrow............. in the pre-existing part1() function which we passed our List<String.> 
 ```
 fun part1(input: List<String>): Int {
     val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
@@ -74,6 +78,18 @@ for (value in input) {
     println("We love the smell of bread in Paris!")
 }
 ```
+---
+# Reflection
+Take some time to reflect on your process for each Advent of Code assignment. Please write your reflection in the repository README.md file. You may take any approach you like for your reflection, but key questions to consider are:
+
+How long did you take to find a complete solution? <br>
+What documentation and resources did you use to identify your solution? <br>
+Did you use a good commit process (i.e. commit stable codon a regular basis?) <br>
+Did you discuss your potential solution with any of your peers? <br>
+What process did you take to identify your idiomatic code choices? <br>
+What did you learn about the language, or about idioms or refactoring in the process? <br>
+How did you find the writing process and the argumentation in support of your refactored code? <br>
+Your reflection should be at least two well-formed paragraphs.
 
 
 ---
