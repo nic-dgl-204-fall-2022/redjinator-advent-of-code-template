@@ -12,29 +12,38 @@ fun main() {
     }
 
     // Part 1 - getSurfaceArea
-    fun getSurfaceArea(l: Int, w: Int, h: Int): Int {
-        val surfaceArea  = 2 * (l * w) + 2 * (w * h) + 2 * (h * l)
-        val extraSlack = minOf(l * w, w * h, h * l)
-        return (surfaceArea + extraSlack)
-    }
+    fun getSurfaceArea(l: Int, w: Int, h: Int): Int  = 2 * (l * w) + 2 * (w * h) + 2 * (h * l)
+
+    fun getExtraSlack(l: Int, w: Int, h: Int): Int =  minOf(l * w, w * h, h * l)
+
 
     // Part 1
     fun part1(input: List<String>): Int {
-        val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
+
+        // Create a list of Int's from the list of Strings
+        val measurements = input
+            .map { it.split('x') }
+            .map { it.map { it.toInt() }}
+
+        // container for solution
         var totalPaper   = 0
 
-        for (i in inputSplit.indices) {
-            totalPaper   += getSurfaceArea(inputSplit[i][0], inputSplit[i][1], inputSplit[i][2])
+        // gets paper and slack required for each box and adds it to total
+        for (i in measurements.indices) {
+            val (length, width, height) = Triple(measurements[i][0], measurements[i][1], measurements[i][2])
+            val paperRequired = getSurfaceArea(length, width, height)
+            val slackRequired = getExtraSlack(length, width, height)
+
+            totalPaper   += (paperRequired + slackRequired)
         }
         return totalPaper
     }
 
     // Part 2 - getSmallestPerimeter
     fun getSmallestPerimeter(l: Int, w: Int, h: Int): Int {
-        val maxValue = maxOf(l, w, h)
-        val measurementSet     = intArrayOf(l, w, h)
-
-        val indexOfMax = measurementSet.indexOf(maxValue)
+        val maxValue              = maxOf(l, w, h)
+        val measurementSet        = intArrayOf(l, w, h)
+        val indexOfMax            = measurementSet.indexOf(maxValue)
         val measurementPair       = remove(measurementSet, indexOfMax)
         return measurementPair[0] + measurementPair[0] + measurementPair[1] + measurementPair[1]
     }
