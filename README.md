@@ -9,7 +9,7 @@ by calculating the surface area of each present using measurement data stored lo
 Measurements are a single string containing length, width, and height separated by `"x"`
 _See example (below)_
 
-Sample of the first 5 lines in `input.txt`
+Sample of `input.txt`
 ```
 29x13x26
 11x11x14
@@ -17,20 +17,19 @@ Sample of the first 5 lines in `input.txt`
 6x10x13
 15x19x10
 ```
-### Steps 
-* Obtain measurements (length, width, and height) from file and cast values to Int
+### Obstacles
+* Get measurements (length, width, and height) from file and cast values to Int
 * Calculate the surface area of each present.
 * Calculate the extra slack for each present.
 * Repeat for remaining presents
 
 ## First solution
-To deal with the measurements I read the `input.txt` file using `val input = readInput("filename")` from `Utils.kt` and use `.map{ } `to create them from `String` to `Int` as seen below 
-```
-val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
-```
 
-### function _part1(input: List<String.>)_
-The _part1()_ function is the primary vehicle to carry out the required steps towards....................... I'm so tired I need to do this tomorrow............. in the pre-existing part1() function which we passed our List<String.> 
+
+### function _part1 ( )_
+The _part1()_ function is the primary vehicle for our solution which we pass a list of measurements from the file `input.txt` using the `readInput()` function found in `Utils.kt`.
+
+
 ```
 fun part1(input: List<String>): Int {
     val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
@@ -43,6 +42,11 @@ fun part1(input: List<String>): Int {
 }
 ```
 
+## Obstacle #1
+ Chaining together uses of `.map{ }` allowed us to create a new list with values converted to `Int` _(seen below)_.
+```
+val inputSplit = input.map { it.split('x') }.map { it.map { it.toInt() }}
+```
 
 
 
