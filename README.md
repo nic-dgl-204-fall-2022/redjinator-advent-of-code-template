@@ -8,7 +8,7 @@ by calculating the surface area of each present using a locally stored measureme
 _See example (below)_
 
 Sample of `input.txt`
-```
+```kotlin
 29x13x26
 11x11x14
 27x2x5
@@ -29,7 +29,7 @@ The _part1( )_ function is the intended vehicle for our solution which will retu
 The list of measurements in the file `input.txt` is obtained using `readInput()`  found in `Utils.kt` and passed as an argument to `part1()`.
 
 
-```
+```kotlin
     // Part 1
     fun part1(input: List<String>): Int {
 
@@ -56,7 +56,7 @@ The list of measurements in the file `input.txt` is obtained using `readInput()`
  * The first use deliniates the measurements using `x` resulting in a single string ex:`"10x12x3"` changing to a list containing 3 string elements `["10", "12", "3"]`.
  * The second use is used on the resulting list to target it's elements
  * The third use is used on the elements to target it's values and cast them to Int using `.toInt()`
-```
+```kotlin
 // Create a list of Int's from the list of Strings
 val measurements = input
     .map { it.split('x') }
@@ -65,7 +65,7 @@ val measurements = input
 
 ## Obstacles 2 && 3
 Created 2 functions `getSurfaceArea()` and `getExtraSlack()` to calculate the surface area and extra slack of each present. They also use the shorthand which is idiomatic of Kotlin.
-```
+```kotlin
 fun getSurfaceArea(l: Int, w: Int, h: Int): Int  = 2 * (l * w) + 2 * (w * h) + 2 * (h * l)
 
 fun getExtraSlack(l: Int, w: Int, h: Int): Int =  minOf(l * w, w * h, h * l)
@@ -75,7 +75,7 @@ fun getExtraSlack(l: Int, w: Int, h: Int): Int =  minOf(l * w, w * h, h * l)
 Used a `for` loop to iterate through the list of measurements 1 present at a time and use functions `getSurFaceArea()` and `getExtraSlack()` to calculate the numbers and add them to the total each loop.
 
 Note: Using the Triple seemed like an easy way to add some readability to the code in a more concise way than assigning each dimension individually.
-```
+```kotlin
         // gets paper and slack required for each box and adds it to total
         for (i in measurements.indices) {
             val (length, width, height) = Triple(measurements[i][0], measurements[i][1], measurements[i][2])
@@ -87,7 +87,7 @@ Note: Using the Triple seemed like an easy way to add some readability to the co
 ```
 
 I could have removed a line by using the measurements this way _(below)_ but I think it's less readable.:
-```
+```kotlin
         // gets paper and slack required for each box and adds it to total
         for (i in measurements.indices) {
             val paperRequired = getSurfaceArea(measurements[i][0], measurements[i][1], measurements[i][2])
@@ -113,36 +113,91 @@ The ribbon required is the shortest distance around the sides or the smallest pe
 * Calculate the volume cubed.
 
 ## Second solution
-
-
-
-
-
-
-
-
-
-
-
-
-
+### part2() function
+The _part2( )_ function is the intended vehicle for our solution which will be returned as an `Int` variable represented by `totalRibbon` which is the sum of the smallest perimeter and cubic feet of volume
 ```kotlin
-for (value in input) {
-    println("We love the smell of bread in Paris!")
+fun part2(input: List<String>): Int {
+
+    val measurements = input
+        .map { it.split('x') }
+        .map { it.map { it.toInt() }}
+
+    var totalRibbon: Int = 0
+
+    for (i in measurements.indices) {
+        val perimeter    = getSmallestPerimeter(measurements[i][0], measurements[i][1], measurements[i][2])
+        val volume       = getVolumeCubed(measurements[i][0], measurements[i][1], measurements[i][2])
+        totalRibbon     += perimeter + volume
+    }
+
+    return totalRibbon
 }
 ```
+
+
+## Obstacle 1
+Handled the exact same way as in problem 1
+
+## Obstacle 2
+To get the perimeter of the smallest face I needed the 2 smallest values out of (lxwxh). So I determined the maxValue of (l,w,h), put them into an array and targeted the largest value using it's index and removing it. This way I only needed to manipulate a single value instead of trying to target the 2 smallest values.
+```kotlin
+    fun getSmallestPerimeter(l: Int, w: Int, h: Int): Int {
+        val maxValue              = maxOf(l, w, h)
+        val measurementSet        = intArrayOf(l, w, h)
+        val indexOfMax            = measurementSet.indexOf(maxValue)
+        val measurementPair       = remove(measurementSet, indexOfMax)
+
+        return measurementPair[0] + measurementPair[0] + measurementPair[1] + measurementPair[1]
+    }
+```
+
+This is the remove function I used to remove the largest value from my IntArray in the `getSmallestPerimeter()` function. I believe I found this on the Kotlin site in the examples somewhere. I can't find the location at present.
+```kotlin
+    fun remove(arr: IntArray, index: Int): IntArray {
+        if (index < 0 || index >= arr.size) {
+            return arr
+        }
+
+        val result = arr.toMutableList()
+        result.removeAt(index)
+        return result.toIntArray()
+    }
+```
+## Obstacle 3
+To get the cubic feet of volume of each present I wrote the following single line function in kotlin shorthand
+```kotlin
+fun getVolumeCubed(l: Int, w: Int, h: Int): Int { return l*w*h }
+```
+
+
 ---
 # Reflection
-Take some time to reflect on your process for each Advent of Code assignment. Please write your reflection in the repository README.md file. You may take any approach you like for your reflection, but key questions to consider are:
+You may take any approach you like for your reflection, but key questions to consider are:
 
 How long did you take to find a complete solution? <br>
-What documentation and resources did you use to identify your solution? <br>
+It took me about 2 or 3 hours to get the solutions and about double that amount of time refactoring and revising this document. I primarily used [kotlinlang.org](https://kotlinlang.org/docs/home.html)
+
 Did you use a good commit process (i.e. commit stable codon a regular basis?) <br>
+I tried to enter my commits better but there is much room for improvement. I lost track a few times and ended up rolling multiple changes into one. I almost feel like I  need to plan my commit before working on it so I have a goal.
+
 Did you discuss your potential solution with any of your peers? <br>
+Unfortunately most of this project was done after midnight and on breaks at work so I did not get a chance to touch base with my classmates.
+
+
 What process did you take to identify your idiomatic code choices? <br>
-What did you learn about the language, or about idioms or refactoring in the process? <br>
-How did you find the writing process and the argumentation in support of your refactored code? <br>
-Your reflection should be at least two well-formed paragraphs.
+I looked at each section of my code and looked for relavant examples at [Kotlinlang.org](https://kotlinlang.org/) in the [Idioms](https://kotlinlang.org/docs/idioms.html) and [Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) sections to determine if I needed to make any idiomatic changes.
+
+
+
+How did you find the writing process and the argumentation in support of your refactored code? <br> I'm a little worried I didn't go in depth enough as I only really identified areas where I made mistakes and ignored any natually followed idioms or conventions but I need to move forward to other work.
+
+
+
+
+
+
+
+
 
 
 ---
